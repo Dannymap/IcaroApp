@@ -1,5 +1,12 @@
+import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:icaros_app/components/loader_component.dart';
+import 'package:icaros_app/helpers/constans.dart';
+import 'package:icaros_app/models/token.dart';
+import 'package:icaros_app/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,23 +27,33 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberme = true;
   bool _passwordShow = false;
 
+  bool _showLoader = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: <Widget>[
-          _showLogo(),
-          SizedBox(
-            height: 5,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _showLogo(),
+              SizedBox(
+                height: 5,
+              ),
+              _showEmail(),
+              _showPassword(),
+              _showRememberme(),
+              _showButtons(),
+            ],
           ),
-          _showEmail(),
-          _showPassword(),
-          _showRememberme(),
-          _showButtons(),
+          _showLoader
+              ? LoaderComponent(
+                  text: 'Por favor espere...',
+                )
+              : Container(),
         ],
-      )),
+      ),
     );
   }
 
@@ -147,22 +164,70 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _login() {
+  void _login() async {
+    setState(() {
+      _passwordShow = false;
+    });
+
     if (!_validateFields()) {
       return;
     }
+
+    setState(() {
+      _showLoader = true;
+    });
+
+    Map<String, dynamic> request = {
+      'userName': _email,
+      'password': _password,
+    };
+
+    var url = Uri.parse('${Constans.apiUrl}/api/account/createtoken');
+    var response = await http.post(
+      url,
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: jsonEncode(request),
+    );
+
+    setState(() {
+      _showLoader = false;
+    });
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _passwordShowError = true;
+        _passwordError = 'Email o contraseña incorrectos';
+      });
+      return;
+    }
+
+    var body = response.body;
+    var decodedJson = jsonDecode(body);
+    var token = Token.fromJson(decodedJson);
+
+    //print(token.token);
+
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  token: token,
+                )));
   }
 
   bool _validateFields() {
-    bool hasErrors = false;
+    bool isValid = true;
 
     //Valido el campo email
     if (_email.isEmpty) {
-      hasErrors = true;
+      isValid = false;
       _emailShowError = true;
       _emailError = 'Debes ingresar un email.';
     } else if (!EmailValidator.validate(_email)) {
-      hasErrors = true;
+      isValid = false;
       _emailShowError = true;
       _emailError = 'Debes ingresar un email válido';
     } else {
@@ -171,11 +236,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     //Valido el campo password
     if (_password.isEmpty) {
-      hasErrors = true;
+      isValid = false;
       _passwordShowError = true;
       _passwordError = 'Debes ingresar una contraseña.';
     } else if (_password.length < 6) {
-      hasErrors = true;
+      isValid = false;
       _emailShowError = true;
       _emailError = 'Debes ingresar una contraña de 6 carácteres minimo.';
     } else {
@@ -183,6 +248,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() {});
-    return hasErrors;
+    return isValid;
   }
 }
