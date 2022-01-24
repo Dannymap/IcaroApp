@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:icaros_app/screens/procedure_screen.dart';
 import 'package:intl/intl.dart';
 
 import 'package:icaros_app/components/loader_component.dart';
@@ -42,7 +43,15 @@ class _ProceduresScreenState extends State<ProceduresScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProcedureScreen(
+                        token: widget.token,
+                        procedure: Procedure(description: '', id: 0, price: 0),
+                      )));
+        },
       ),
     );
   }
@@ -101,7 +110,15 @@ class _ProceduresScreenState extends State<ProceduresScreen> {
       children: _procedures.map((e) {
         return Card(
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProcedureScreen(
+                            token: widget.token,
+                            procedure: e,
+                          )));
+            },
             child: Container(
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(5),
