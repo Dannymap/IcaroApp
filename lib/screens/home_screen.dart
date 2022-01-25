@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icaros_app/models/token.dart';
+import 'package:icaros_app/screens/document_types_screen.dart';
+import 'package:icaros_app/screens/injury_types_screen.dart';
 import 'package:icaros_app/screens/login_screen.dart';
 import 'package:icaros_app/screens/procedures_screen.dart';
 
@@ -83,12 +85,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ListTile(
             leading: Icon(Icons.badge),
             title: Text('Tipos de Documento'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DocumentTypesScreen(
+                            token: widget.token,
+                          )));
+            },
           ),
           ListTile(
             leading: Icon(Icons.personal_injury),
             title: Text('Tipos de Lesión'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InjuryTypesScreen(
+                            token: widget.token,
+                          )));
+            },
           ),
           ListTile(
             leading: Icon(Icons.people),
