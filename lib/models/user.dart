@@ -1,3 +1,4 @@
+import 'package:icaros_app/models/injury.dart';
 import 'document_type.dart';
 
 class User {
@@ -10,6 +11,8 @@ class User {
   String imageFullPath = '';
   int userType = 0;
   String fullName = '';
+  List<Injury> injurys = [];
+  int injurysCount = 0;
   String id = '';
   String userName = '';
   String email = '';
@@ -25,6 +28,8 @@ class User {
       required this.imageFullPath,
       required this.userType,
       required this.fullName,
+      required this.injurys,
+      required this.injurysCount,
       required this.id,
       required this.userName,
       required this.email,
@@ -40,6 +45,13 @@ class User {
     imageFullPath = json['imageFullPath'];
     userType = json['userType'];
     fullName = json['fullName'];
+    if (json['injurys'] != null) {
+      injurys = <Injury>[];
+      json['injurys'].forEach((v) {
+        injurys.add(new Injury.fromJson(v));
+      });
+    }
+    injurysCount = json['injurysCount'];
     id = json['id'];
     userName = json['userName'];
     email = json['email'];
@@ -57,6 +69,8 @@ class User {
     data['imageFullPath'] = this.imageFullPath;
     data['userType'] = this.userType;
     data['fullName'] = this.fullName;
+    data['injurys'] = this.injurys.map((v) => v.toJson()).toList();
+    data['injurysCount'] = this.injurysCount;
     data['id'] = this.id;
     data['userName'] = this.userName;
     data['email'] = this.email;

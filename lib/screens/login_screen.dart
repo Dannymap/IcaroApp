@@ -32,9 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Color(0xFFFFFFFF),
       body: Stack(
         children: <Widget>[
-          Column(
+          SingleChildScrollView(
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _showLogo(),
@@ -46,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _showRememberme(),
               _showButtons(),
             ],
-          ),
+          )),
           _showLoader
               ? LoaderComponent(
                   text: 'Por favor espere...',
