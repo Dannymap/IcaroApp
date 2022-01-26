@@ -14,6 +14,8 @@ class Token {
       imageFullPath: '',
       userType: 0,
       fullName: '',
+      injurys: [],
+      injurysCount: 0,
       id: '',
       userName: '',
       email: '',
