@@ -4,56 +4,47 @@ import 'package:flutter/material.dart';
 
 import 'package:icaros_app/components/loader_component.dart';
 import 'package:icaros_app/helpers/api_helper.dart';
-import 'package:icaros_app/models/procedure.dart';
 import 'package:icaros_app/models/response.dart';
 import 'package:icaros_app/models/token.dart';
+import 'package:icaros_app/models/user.dart';
 
-class ProcedureScreen extends StatefulWidget {
+class UserScreen extends StatefulWidget {
   final Token token;
-  final Procedure procedure;
+  final User user;
 
-  ProcedureScreen({required this.token, required this.procedure});
+  UserScreen({required this.token, required this.user});
 
   @override
-  _ProcedureScreenState createState() => _ProcedureScreenState();
+  _UserScreenState createState() => _UserScreenState();
 }
 
-class _ProcedureScreenState extends State<ProcedureScreen> {
+class _UserScreenState extends State<UserScreen> {
   bool _showLoader = false;
 
-  String _description = '';
-  String _descriptionError = '';
-  bool _descriptionShowError = false;
-  TextEditingController _descriptionController = TextEditingController();
-
-  String _price = '';
-  String _priceError = '';
-  bool _priceShowError = false;
-  TextEditingController _priceController = TextEditingController();
+  String _firstName = '';
+  String _firstNameError = '';
+  bool _firstNameShowError = false;
+  TextEditingController _firstNameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _description = widget.procedure.description;
-    _descriptionController.text = _description;
-    _price = widget.procedure.price.toString();
-    _priceController.text = _price;
+    _firstName = widget.user.fullName;
+    _firstNameController.text = _firstName;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.procedure.id == 0
-            ? 'Nuevo procedimiento'
-            : widget.procedure.description),
+        title: Text(
+            widget.user.id.isEmpty ? 'Nuevo usuario' : widget.user.fullName),
       ),
       body: Stack(
         children: [
           Column(
             children: <Widget>[
-              _showDescription(),
-              _showPrice(),
+              _showFirstName(),
               _showButtons(),
             ],
           ),
@@ -67,41 +58,20 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
     );
   }
 
-  Widget _showDescription() {
+  Widget _showFirstName() {
     return Container(
       padding: EdgeInsets.all(10),
       child: TextField(
-        controller: _descriptionController,
+        controller: _firstNameController,
         decoration: InputDecoration(
-          hintText: 'Ingresa una descripción...',
-          labelText: 'Descripción',
-          errorText: _descriptionShowError ? _descriptionError : null,
-          suffixIcon: Icon(Icons.description),
+          hintText: 'Ingresa nombre...',
+          labelText: 'Nombres',
+          errorText: _firstNameShowError ? _firstNameError : null,
+          suffixIcon: Icon(Icons.person),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
         onChanged: (value) {
-          _description = value;
-        },
-      ),
-    );
-  }
-
-  Widget _showPrice() {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: TextField(
-        keyboardType:
-            TextInputType.numberWithOptions(decimal: true, signed: false),
-        controller: _priceController,
-        decoration: InputDecoration(
-          hintText: 'Ingresa un precio...',
-          labelText: 'Precio',
-          errorText: _priceShowError ? _priceError : null,
-          suffixIcon: Icon(Icons.attach_money),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-        onChanged: (value) {
-          _price = value;
+          _firstName = value;
         },
       ),
     );
@@ -125,12 +95,12 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
               onPressed: () => _save(),
             ),
           ),
-          widget.procedure.id == 0
+          widget.user.id.isEmpty
               ? Container()
               : SizedBox(
                   width: 20,
                 ),
-          widget.procedure.id == 0
+          widget.user.id.isEmpty
               ? Container()
               : Expanded(
                   child: ElevatedButton(
@@ -154,40 +124,25 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
       return;
     }
 
-    widget.procedure.id == 0 ? _addRecord() : _saveRecord();
+    widget.user.id.isEmpty ? _addRecord() : _saveRecord();
   }
 
   bool _validateFields() {
     bool isValid = true;
 
-    if (_description.isEmpty) {
+    if (_firstName.isEmpty) {
       isValid = false;
-      _descriptionShowError = true;
-      _descriptionError = 'Debes ingresar una descripción.';
+      _firstNameShowError = true;
+      _firstNameError = 'Debes ingresar un nombre.';
     } else {
-      _descriptionShowError = false;
-    }
-
-    if (_price.isEmpty) {
-      isValid = false;
-      _priceShowError = true;
-      _priceError = 'Debes ingresar un precio.';
-    } else {
-      double price = double.parse(_price);
-      if (price <= 0) {
-        isValid = false;
-        _priceShowError = true;
-        _priceError = 'Debes ingresar un precio mayor a cero.';
-      } else {
-        _priceShowError = false;
-      }
+      _firstNameShowError = false;
     }
 
     setState(() {});
     return isValid;
   }
 
-  void _addRecord() async {
+  _addRecord() async {
     setState(() {
       _showLoader = true;
     });
@@ -198,22 +153,22 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
         _showLoader = false;
       });
       await showAlertDialog(
-          context: context,
-          title: 'Error',
-          message: 'Verifica que estes conectado a internet.',
-          actions: <AlertDialogAction>[
+        context: context,
+        title: 'Error', 
+        message: 'Verifica que estes conectado a internet.',
+        actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-          ]);
+        ]
+      );    
       return;
     }
 */
     Map<String, dynamic> request = {
-      'description': _description,
-      'price': double.parse(_price),
+      'firstName': _firstName,
     };
 
     Response response =
-        await ApiHelper.post('/api/Procedures/', request, widget.token);
+        await ApiHelper.post('/api/Users/', request, widget.token);
 
     setState(() {
       _showLoader = false;
@@ -233,7 +188,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
     Navigator.pop(context, 'yes');
   }
 
-  void _saveRecord() async {
+  _saveRecord() async {
     setState(() {
       _showLoader = true;
     });
@@ -244,23 +199,23 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
         _showLoader = false;
       });
       await showAlertDialog(
-          context: context,
-          title: 'Error',
-          message: 'Verifica que estes conectado a internet.',
-          actions: <AlertDialogAction>[
+        context: context,
+        title: 'Error', 
+        message: 'Verifica que estes conectado a internet.',
+        actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-          ]);
+        ]
+      );    
       return;
     }
 */
     Map<String, dynamic> request = {
-      'id': widget.procedure.id,
-      'description': _description,
-      'price': double.parse(_price),
+      'id': widget.user.id,
+      'firstName': _firstName,
     };
 
-    Response response = await ApiHelper.put('/api/Procedures/',
-        widget.procedure.id.toString(), request, widget.token);
+    Response response = await ApiHelper.put(
+        '/api/Users/', widget.user.id.toString(), request, widget.token);
 
     setState(() {
       _showLoader = false;
@@ -306,17 +261,18 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
         _showLoader = false;
       });
       await showAlertDialog(
-          context: context,
-          title: 'Error',
-          message: 'Verifica que estes conectado a internet.',
-          actions: <AlertDialogAction>[
+        context: context,
+        title: 'Error', 
+        message: 'Verifica que estes conectado a internet.',
+        actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-          ]);
+        ]
+      );    
       return;
     }
 */
-    Response response = await ApiHelper.delete(
-        '/api/Procedures/', widget.procedure.id.toString(), widget.token);
+    Response response =
+        await ApiHelper.delete('/api/Users/', widget.user.id, widget.token);
 
     setState(() {
       _showLoader = false;

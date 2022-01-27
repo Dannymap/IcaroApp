@@ -4,6 +4,7 @@ import 'package:icaros_app/screens/document_types_screen.dart';
 import 'package:icaros_app/screens/injury_types_screen.dart';
 import 'package:icaros_app/screens/login_screen.dart';
 import 'package:icaros_app/screens/procedures_screen.dart';
+import 'package:icaros_app/screens/users_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Token token;
@@ -109,7 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ListTile(
             leading: Icon(Icons.people),
             title: Text('Usuarios'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UsersScreen(
+                            token: widget.token,
+                          )));
+            },
           ),
           Divider(
             color: Colors.black,
