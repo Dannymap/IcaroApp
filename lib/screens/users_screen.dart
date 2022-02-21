@@ -8,6 +8,7 @@ import 'package:icaros_app/models/document_type.dart';
 import 'package:icaros_app/models/response.dart';
 import 'package:icaros_app/models/token.dart';
 import 'package:icaros_app/models/user.dart';
+import 'package:icaros_app/screens/user_info_screen.dart';
 import 'package:icaros_app/screens/user_screen.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -59,23 +60,22 @@ class _UsersScreenState extends State<UsersScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         _showLoader = false;
       });
       await showAlertDialog(
-        context: context,
-        title: 'Error', 
-        message: 'Verifica que estes conectado a internet.',
-        actions: <AlertDialogAction>[
+          context: context,
+          title: 'Error',
+          message: 'Verifica que estes conectado a internet.',
+          actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-        ]
-      );    
+          ]);
       return;
     }
-*/
+
     Response response = await ApiHelper.getUsers(widget.token);
 
     setState(() {
@@ -123,7 +123,7 @@ class _UsersScreenState extends State<UsersScreen> {
         children: _users.map((e) {
           return Card(
             child: InkWell(
-              onTap: () => _goEdit(e),
+              onTap: () => _goInfoUser(e),
               child: Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(5),
@@ -260,6 +260,7 @@ class _UsersScreenState extends State<UsersScreen> {
         MaterialPageRoute(
             builder: (context) => UserScreen(
                   token: widget.token,
+                  myProfile: false,
                   user: User(
                       firstName: '',
                       lastName: '',
@@ -282,11 +283,11 @@ class _UsersScreenState extends State<UsersScreen> {
     }
   }
 
-  void _goEdit(User user) async {
+  void _goInfoUser(User user) async {
     String? result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => UserScreen(
+            builder: (context) => UserInfoScreen(
                   token: widget.token,
                   user: user,
                 )));

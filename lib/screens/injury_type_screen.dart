@@ -147,23 +147,22 @@ class _InjuryTypeScreenState extends State<InjuryTypeScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         _showLoader = false;
       });
       await showAlertDialog(
-        context: context,
-        title: 'Error', 
-        message: 'Verifica que estes conectado a internet.',
-        actions: <AlertDialogAction>[
+          context: context,
+          title: 'Error',
+          message: 'Verifica que estes conectado a internet.',
+          actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-        ]
-      );    
+          ]);
       return;
     }
-*/
+
     Map<String, dynamic> request = {
       'description': _description,
     };
@@ -193,23 +192,22 @@ class _InjuryTypeScreenState extends State<InjuryTypeScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         _showLoader = false;
       });
       await showAlertDialog(
-        context: context,
-        title: 'Error', 
-        message: 'Verifica que estes conectado a internet.',
-        actions: <AlertDialogAction>[
+          context: context,
+          title: 'Error',
+          message: 'Verifica que estes conectado a internet.',
+          actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-        ]
-      );    
+          ]);
       return;
     }
-*/
+
     Map<String, dynamic> request = {
       'id': widget.injuryType.id,
       'description': _description,
@@ -255,23 +253,22 @@ class _InjuryTypeScreenState extends State<InjuryTypeScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         _showLoader = false;
       });
       await showAlertDialog(
-        context: context,
-        title: 'Error', 
-        message: 'Verifica que estes conectado a internet.',
-        actions: <AlertDialogAction>[
+          context: context,
+          title: 'Error',
+          message: 'Verifica que estes conectado a internet.',
+          actions: <AlertDialogAction>[
             AlertDialogAction(key: null, label: 'Aceptar'),
-        ]
-      );    
+          ]);
       return;
     }
-*/
+
     Response response = await ApiHelper.delete(
         '/api/InjuryTypes/', widget.injuryType.id.toString(), widget.token);
 

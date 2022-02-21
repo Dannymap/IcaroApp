@@ -7,9 +7,9 @@ class History {
   String remarks = '';
   List<Detail> details = [];
   int detailsCount = 0;
-  double totalLabor = 0;
-  double totalProducts = 0;
-  double total = 0;
+  int totalLabor = 0;
+  int totalProducts = 0;
+  int total = 0;
 
   History(
       {required this.id,

@@ -191,7 +191,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -206,7 +206,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
           ]);
       return;
     }
-*/
+
     Map<String, dynamic> request = {
       'description': _description,
       'price': double.parse(_price),
@@ -237,7 +237,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -252,7 +252,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
           ]);
       return;
     }
-*/
+
     Map<String, dynamic> request = {
       'id': widget.procedure.id,
       'description': _description,
@@ -299,7 +299,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
     setState(() {
       _showLoader = true;
     });
-/*
+
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
@@ -314,7 +314,7 @@ class _ProcedureScreenState extends State<ProcedureScreen> {
           ]);
       return;
     }
-*/
+
     Response response = await ApiHelper.delete(
         '/api/Procedures/', widget.procedure.id.toString(), widget.token);
 

@@ -3,9 +3,9 @@ import 'package:icaros_app/models/procedure.dart';
 class Detail {
   int id = 0;
   Procedure procedure = Procedure(description: '', id: 0, price: 0);
-  double laborPrice = 0;
-  double productsPrice = 0;
-  double totalPrice = 0;
+  int laborPrice = 0;
+  int productsPrice = 0;
+  int totalPrice = 0;
   String remarks = '';
 
   Detail(
