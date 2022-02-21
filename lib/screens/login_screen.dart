@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:icaros_app/components/loader_component.dart';
 import 'package:icaros_app/helpers/constans.dart';
@@ -64,9 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _showLogo() {
     return Image(
-      image: AssetImage('assets/LogoCirculo.png'),
-      width: 250,
-    );
+        image: AssetImage('assets/LogoCirculo.png'),
+        width: 250,
+        fit: BoxFit.fill);
   }
 
   Widget _showEmail() {
@@ -225,6 +226,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     var body = response.body;
+
+    if (_rememberme) {
+      _storeUser(body);
+    }
+
     var decodedJson = jsonDecode(body);
     var token = Token.fromJson(decodedJson);
 
@@ -270,4 +276,22 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {});
     return isValid;
   }
+
+  void _storeUser(String body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isRemembered', true);
+    await prefs.setString('userBody', body);
+  }
+
+/*
+  void _register() {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => RegisterUserScreen()
+      )
+    );    
+  }
+*/
+
 }
