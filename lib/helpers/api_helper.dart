@@ -147,7 +147,6 @@ class ApiHelper {
     if (DateTime.parse(token.expiration).isAfter(DateTime.now())) {
       return true;
     }
-
     return false;
   }
 
